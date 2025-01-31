@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/bo/users")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class UserController {
 
     private final UserService userService;

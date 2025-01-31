@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/bo/departments")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class DepartmentController {
 
     private final DepartmentService departmentService;
