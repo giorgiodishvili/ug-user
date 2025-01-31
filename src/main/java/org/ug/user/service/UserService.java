@@ -8,7 +8,6 @@ import org.ug.user.mapper.UserMapper;
 import org.ug.user.repository.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final DepartmentService departmentService;
     private final UserMapper userMapper;
 
     public List<UserDTO> getAllUsers() {
@@ -32,6 +32,7 @@ public class UserService {
     }
 
     public UserDTO createUser(UserDTO userDTO) {
+        validate(userDTO);
         User user = userMapper.toUser(userDTO);
         User savedUser = userRepository.save(user);
         return userMapper.toUserDTO(savedUser);
@@ -40,6 +41,8 @@ public class UserService {
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        validate(userDTO);
         userMapper.toUser(userDTO, existingUser); // Update fields
         User updatedUser = userRepository.save(existingUser);
         return userMapper.toUserDTO(updatedUser);
@@ -47,5 +50,10 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+
+    private void validate(UserDTO userDTO) {
+        departmentService.getDepartmentById(userDTO.getId());
     }
 }
